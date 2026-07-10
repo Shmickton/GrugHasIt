@@ -17,6 +17,19 @@ app.use(morgan())
 //  ================= WORK IS DONE BELOW THIS LINE ===================
 // ====================================================================
 
+app.post('/auth/register', (req, res) => {
+    return res.json(result);
+})
+
+
+app.post('/auth/register', (req, res) => {
+    return res.json(result);
+})
+
+app.post('/auth/logout', (req, res) => {
+    return res.json(result);
+})
+
 
 // Start server
 const server = app.listen(PORT, HOST, () => {
