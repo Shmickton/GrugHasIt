@@ -1,13 +1,15 @@
-import express, { json, NextFunction, Request, Response } from 'express';
+import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors'
+import crypto from 'crypto'
 
 // Set up web app
 const app = express()
-const port = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 const HOST = process.env.IP || '127.0.0.1';
 
 // Use middleware that allows us to access the JSON body of requests
-app.use(json())
+app.use(express.json())
 // Use middleware that allows for access from other domains
 app.use(cors())
 // Use middleware for logging errors
