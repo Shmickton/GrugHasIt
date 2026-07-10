@@ -22,7 +22,7 @@ app.post('/auth/register', (req, res) => {
 })
 
 
-app.post('/auth/register', (req, res) => {
+app.post('/auth/login', (req, res) => {
     return res.json(result);
 })
 
