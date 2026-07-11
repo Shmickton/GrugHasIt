@@ -147,7 +147,7 @@ function MyListings({ user, onNavigateToAccount }: MyListingsProps) {
 
     if (!user) {
         return (
-            <div className="py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
+            <div className="min-h-screen py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
                 <div className="max-w-sm mx-auto text-center">
                     <h1
                         className="text-2xl font-bold mb-2"
@@ -172,7 +172,7 @@ function MyListings({ user, onNavigateToAccount }: MyListingsProps) {
     }
 
     return (
-        <div className="py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
+        <div className="min-h-screen py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
             <div className="max-w-2xl mx-auto">
                 <h1
                     className="text-2xl sm:text-3xl font-bold mb-6"
