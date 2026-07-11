@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
 import crypto from 'crypto'
+import { authenticateListing, removeListing, saveListing } from './features/helper';
 
 // Set up web app
 const app = express()
@@ -37,15 +38,28 @@ app.post('/auth/logout', (req, res) => {
 // LISTINGS
 
 app.post('/listing/:uid/create', (req, res) => {
-    const userId = parseInt(req.params.uid);
+    const userId = req.params.uid;
+    const title = req.body.title;
+    const desc = req.body.desc;
+    const cost = req.body.cost;
+    result = saveListing(userId, title, desc, cost);
     return res.json(result);
 })
 
 app.delete('/listing/:uid/remove/:lid', (req, res) => {
+    const userId = req.params.uid;
+    const listingId = req.params.lid;
+    authenticateListing(userId, listingId);
+    removeListing(listingId);
     return res.json(result);
 })
 
 app.put('/listing/:uid/update/:lid', (req, res) => {
+    const userId = req.params.uid;
+    const listingId = req.params.lid;
+    const title = req.body.title;
+    const desc = req.body.desc;
+    const cost = req.body.cost;
     return res.json(result);
 })
 
