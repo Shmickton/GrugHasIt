@@ -114,7 +114,7 @@ function Account({ user, setUser }: AccountProps) {
 
     if (user) {
         return (
-            <div className="py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
+            <div className="min-h-screen py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
                 <div className="max-w-sm mx-auto">
                     <h1
                         className="text-2xl font-bold mb-6"
@@ -188,7 +188,7 @@ function Account({ user, setUser }: AccountProps) {
     }
 
     return (
-        <div className="py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
+        <div className="min-h-screen py-8 px-4 sm:px-8 min-h-[70vh]" style={{ backgroundColor: COLORS.canvas }}>
             <div className="max-w-sm mx-auto">
                 {/* mode toggle */}
                 <div
