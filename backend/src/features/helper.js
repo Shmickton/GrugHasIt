@@ -1,8 +1,12 @@
 
 // R/W TO DATABASE
 
-export function saveUser() {
+import { getData, saveData } from "../dataStore";
 
+export function saveUser(user) {
+    const data = getData();
+    data.users.push(user);
+    saveData();
 }
 
 export function getUser() {
@@ -42,5 +46,5 @@ export function removeBorrow() {
 }
 
 export function getBorrows() {
-    
+
 }
