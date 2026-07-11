@@ -19,6 +19,8 @@ app.use(morgan())
 //  ================= WORK IS DONE BELOW THIS LINE ===================
 // ====================================================================
 
+// AUTH:
+
 app.post('/auth/register', (req, res) => {
     return res.json(result);
 })
@@ -29,6 +31,43 @@ app.post('/auth/login', (req, res) => {
 })
 
 app.post('/auth/logout', (req, res) => {
+    return res.json(result);
+})
+
+// LISTINGS
+
+app.post('/listing/:uid/create', (req, res) => {
+    const userId = parseInt(req.params.uid);
+    return res.json(result);
+})
+
+app.delete('/listing/:uid/remove/:lid', (req, res) => {
+    return res.json(result);
+})
+
+app.put('/listing/:uid/update/:lid', (req, res) => {
+    return res.json(result);
+})
+
+app.get('/listing/newest', (req, res) => {
+    return res.json(result);
+})
+
+app.get('/listing/search', (req, res) => {
+    return res.json(result);
+})
+
+// BORROW
+
+app.post('/borrow/:uid/create', (req, res) => {
+    return res.json(result);
+})
+
+app.put('/borrow/:uid/update/:bid', (req, res) => {
+    return res.json(result);
+})
+
+app.delete('/borrow/:uid/remove/:bid', (req, res) => {
     return res.json(result);
 })
 
