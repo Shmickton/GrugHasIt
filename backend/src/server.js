@@ -9,12 +9,12 @@ const app = express()
 const PORT = process.env.PORT || 3000
 const HOST = process.env.IP || '127.0.0.1';
 
-// Use middleware that allows us to access the JSON body of requests
-app.use(express.json())
-// Use middleware that allows for access from other domains
-app.use(cors())
-// Use middleware for logging errors
 app.use(morgan())
+app.use(express.json())
+app.use(cors({
+  origin: 'http://127.0.0.1:5173',
+  credentials: true,
+}))
 
 // ====================================================================
 //  ================= WORK IS DONE BELOW THIS LINE ===================
