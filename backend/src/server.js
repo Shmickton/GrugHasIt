@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
-import crypto from 'crypto';
+import crypto from 'crypto'
 import { authenticateListing, getListings, removeListing, saveListing, updateListing, UserLogin, UserLogout, UserRegister } from './features/helper.js';
 
 // Set up web app
@@ -12,7 +12,7 @@ const HOST = process.env.IP || '127.0.0.1';
 app.use(morgan())
 app.use(express.json())
 app.use(cors({
-  origin: 'http://127.0.0.1:5173',
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // allow both, since dev testing bounces between them
   credentials: true,
 }))
 
@@ -54,41 +54,62 @@ app.post('/auth/logout', (req, res) => {
 // LISTINGS
 
 app.post('/listing/:uid/create', (req, res) => {
-    const userId = req.params.uid;
-    const title = req.body.title;
-    const desc = req.body.desc;
-    const cost = req.body.cost;
-    result = saveListing(userId, title, desc, cost);
-    return res.json(result);
+    try {
+        const userId = parseInt(req.params.uid, 10);
+        const { title, desc, cost } = req.body;
+        const result = saveListing(userId, title, desc, cost);
+        return res.json({ listingId: result });
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
 })
 
 app.delete('/listing/:uid/remove/:lid', (req, res) => {
-    const userId = req.params.uid;
-    const listingId = req.params.lid;
-    authenticateListing(userId, listingId);
-    removeListing(listingId);
-    return res.json(result);
+    try {
+        const userId = parseInt(req.params.uid, 10);
+        const listingId = parseInt(req.params.lid, 10);
+        authenticateListing(userId, listingId);
+        const result = removeListing(listingId);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
 })
 
 app.put('/listing/:uid/update/:lid', (req, res) => {
-    const userId = req.params.uid;
-    const listingId = req.params.lid;
-    const title = req.body.title;
-    const desc = req.body.desc;
-    const cost = req.body.cost;
-    authenticateListing(userId, listingId);
-    updateListing(listingId, title, desc, cost);
-    return res.json(result);
+    try {
+        const userId = parseInt(req.params.uid, 10);
+        const listingId = parseInt(req.params.lid, 10);
+        const { title, desc, cost } = req.body;
+        authenticateListing(userId, listingId);
+        const result = updateListing(listingId, title, desc, cost);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
 })
 
 app.get('/listing/newest', (req, res) => {
-    const listings = getListings();
-    const last = listings.get(listings.size() - 1);
-    return res.json(last);
+    try {
+        const listings = getListings();
+        const last = listings.length > 0 ? listings[listings.length - 1] : null;
+        return res.json(last);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
 })
 
 app.get('/listing/search', (req, res) => {
-    return res.json(result);
+    try {
+        const listings = getListings();
+        const query = (req.query.q ?? '').toString().trim().toLowerCase();
+        const results = query
+            ? listings.filter(listing => listing.title.toLowerCase().includes(query))
+            : listings;
+        return res.json(results);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
 })
 
 // BORROW

@@ -79,6 +79,7 @@ export const UserLogout = () => {
   data.currentUser = null;
   saveData();
 
+
   return {};
 };
 
@@ -101,19 +102,23 @@ export function authenticateListing(userId, listingId) {
     const data = getData();
     const listing = data.listings.find(listing => listing.listingId === listingId);
     if (!listing) {
-        //error
+        throw new GrugError('INVALID_LISTING', 'Listing does not exist');
     }
 
-    if (listing.userId != userId) {
-        //errors
+    if (listing.userId !== userId) {
+        throw new GrugError('INVALID_USER', 'You do not have permission to modify this listing');
     }
+
+    return listing;
 }
 
 export function saveListing(user, title, desc, cost) {
     const data = getData();
     const id = data.next_lid;
+    const name = data.users.find((u) => u.userId === user).userName;
     data.listings.push({ 
         listingId: id, 
+        userName: name,
         userId: user, 
         title: title, 
         desc: desc, 
@@ -126,21 +131,28 @@ export function saveListing(user, title, desc, cost) {
 
 export function removeListing(id) {
     const data = getData();
+    const removed = data.listings.find(listing => listing.listingId === id);
     data.listings = data.listings.filter(listing => listing.listingId !== id);
     saveData();
+    return removed ?? null;
 }
 
 export function updateListing(id, title, desc, cost) {
     const data = getData();
     const listing = data.listings.find(listing => listing.listingId === id);
+    if (!listing) {
+        throw new GrugError('INVALID_LISTING', 'Listing does not exist');
+    }
     listing.title = title;
     listing.desc = desc;
     listing.cost = cost;
     saveData();
+    return listing;
 }
 
-export function getListing() {
-
+export function getListing(id) {
+    const data = getData();
+    return data.listings.find(listing => listing.listingId === id) ?? null;
 }
 
 export function getListings() {
