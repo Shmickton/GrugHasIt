@@ -1,8 +1,8 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
-import crypto from 'crypto'
-import { authenticateListing, removeListing, saveListing, updateListing } from './features/helper';
+import crypto from 'crypto';
+import { authenticateListing, removeListing, saveListing, updateListing, UserRegister } from './features/helper';
 
 // Set up web app
 const app = express()
@@ -23,16 +23,13 @@ app.use(morgan())
 // AUTH:
 
 app.post('/auth/register', (req, res) => {
-    return res.json(result);
-})
-
-
-app.post('/auth/login', (req, res) => {
-    return res.json(result);
-})
-
-app.post('/auth/logout', (req, res) => {
-    return res.json(result);
+    try {
+        const { email, password, UserName } = req.body;
+        const result = UserRegister(email, password, UserName);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
 })
 
 // LISTINGS

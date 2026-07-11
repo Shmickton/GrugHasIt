@@ -135,10 +135,6 @@ export default function ListingGrid() {
           "repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(34,40,43,0.03) 28px)",
       }}
     >
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@600&display=swap');
-      `}</style>
-
       <div className="max-w-6xl mx-auto" style={{ fontFamily: "'Inter', sans-serif" }}>
         {/* header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
