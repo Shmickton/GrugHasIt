@@ -24,21 +24,12 @@ app.use(morgan())
 
 app.post('/auth/register', (req, res) => {
     try {
-        const { email, password, nameFirst, nameLast } = req.body;
-        const result = UserRegister(email, password, nameFirst, nameLast);
+        const { email, password, UserName } = req.body;
+        const result = UserRegister(email, password, UserName);
         return res.json(result);
     } catch (error) {
         return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
     }
-})
-
-
-app.post('/auth/login', (req, res) => {
-    return res.json(result);
-})
-
-app.post('/auth/logout', (req, res) => {
-    return res.json(result);
 })
 
 // LISTINGS

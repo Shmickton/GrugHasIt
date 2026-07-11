@@ -4,16 +4,15 @@ import crypto from "crypto";
 import { getData, saveData } from "../dataStore.js";
 import { GrugError } from "./GrugError.js";
 
-export const UserRegister = (email, password, nameFirst, nameLast) => {
+export const UserRegister = (email, password, UserName) => {
   const data = getData();
 
-  if (typeof email !== "string" || typeof password !== "string" || typeof nameFirst !== "string" || typeof nameLast !== "string") {
+  if (typeof email !== "string" || typeof password !== "string" || typeof UserName !== "string") {
     throw new GrugError("INVALID_INPUT", "All registration fields must be strings");
   }
 
   const trimmedEmail = email.trim();
-  const trimmedFirstName = nameFirst.trim();
-  const trimmedLastName = nameLast.trim();
+  const trimmedUserName = UserName.trim();
 
   // Email validating
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
@@ -25,14 +24,9 @@ export const UserRegister = (email, password, nameFirst, nameLast) => {
     throw new GrugError('INVALID_EMAIL', 'Email is already in use');
   }
 
-  // User first name validating
-  if (!/^[A-Za-z\s'-]+$/.test(trimmedFirstName) || trimmedFirstName.length < 2 || trimmedFirstName.length > 20) {
-    throw new GrugError('INVALID_FIRST_NAME', 'First name must be 2-20 characters and only letters/spaces');
-  }
-
-  // User last name validating
-  if (!/^[A-Za-z\s'-]+$/.test(trimmedLastName) || trimmedLastName.length < 2 || trimmedLastName.length > 20) {
-    throw new GrugError('INVALID_LAST_NAME', 'Last name must be 2-20 characters and only letters/spaces');
+  // User name validating
+  if (!/^[A-Za-z\s'-]+$/.test(trimmedUserName) || trimmedUserName.length < 2 || trimmedUserName.length > 20) {
+    throw new GrugError('INVALID_USER_NAME', 'User name must be 2-20 characters and only letters/spaces');
   }
 
   // Password validating
@@ -43,8 +37,7 @@ export const UserRegister = (email, password, nameFirst, nameLast) => {
   // Creates new user object
   const newUser = {
     userId: data.next_uid++,
-    nameFirst: trimmedFirstName,
-    nameLast: trimmedLastName,
+    userName: trimmedUserName,
     email: trimmedEmail,
     password,
   };
@@ -53,7 +46,7 @@ export const UserRegister = (email, password, nameFirst, nameLast) => {
   data.users.push(newUser);
   saveData();
 
-  return { userId: newUser.userId, nameFirst: newUser.nameFirst, nameLast: newUser.nameLast, email: newUser.email };
+  return { userId: newUser.userId, userName: newUser.userName, email: newUser.email };
 };
 
 
