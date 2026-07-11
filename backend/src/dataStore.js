@@ -4,6 +4,7 @@ const DATABASE = "database.json";
 
 let data = {
     users: [],
+    currentUser: null,
     listings: [],
     borrows: [],
     next_uid: 1,
@@ -16,6 +17,14 @@ function loadData() {
         const fileData = String(fs.readFileSync(DATABASE));
         data = JSON.parse(fileData);
     }
+
+    data.users ??= [];
+    data.currentUser ??= null;
+    data.listings ??= [];
+    data.borrows ??= [];
+    data.next_uid ??= 1;
+    data.next_lid ??= 1;
+    data.next_bid ??= 1;
 }
 
 loadData();

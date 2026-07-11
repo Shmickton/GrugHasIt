@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
 import crypto from 'crypto';
-import { authenticateListing, removeListing, saveListing, updateListing, UserRegister } from './features/helper';
+import { authenticateListing, removeListing, saveListing, updateListing, UserLogin, UserLogout, UserRegister } from './features/helper.js';
 
 // Set up web app
 const app = express()
@@ -26,6 +26,25 @@ app.post('/auth/register', (req, res) => {
     try {
         const { email, password, UserName } = req.body;
         const result = UserRegister(email, password, UserName);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
+})
+
+app.post('/auth/login', (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const result = UserLogin(email, password);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
+})
+
+app.post('/auth/logout', (req, res) => {
+    try {
+        const result = UserLogout();
         return res.json(result);
     } catch (error) {
         return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });

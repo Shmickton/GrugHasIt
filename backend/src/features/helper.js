@@ -1,6 +1,5 @@
 // R/W TO DATABASE
 
-import crypto from "crypto";
 import { getData, saveData } from "../dataStore.js";
 import { GrugError } from "./GrugError.js";
 
@@ -47,6 +46,41 @@ export const UserRegister = (email, password, UserName) => {
   saveData();
 
   return { userId: newUser.userId, userName: newUser.userName, email: newUser.email };
+};
+
+export const UserLogin = (email, password) => {
+  const data = getData();
+
+  if (typeof email !== "string" || typeof password !== "string") {
+    throw new GrugError("INVALID_INPUT", "Email and password must be strings");
+  }
+
+  const trimmedEmail = email.trim();
+  const user = data.users.find(currentUser => currentUser.email === trimmedEmail);
+
+  if (!user || user.password !== password) {
+    throw new GrugError("INVALID_CREDENTIALS", "Email or password is incorrect");
+  }
+
+  // Only one user can be logged in at a time.
+  data.currentUser = user.userId;
+  saveData();
+
+  return { userId: user.userId };
+};
+
+export const UserLogout = () => {
+  const data = getData();
+
+  if (data.currentUser === null) {
+    throw new GrugError("INVALID_USER", "No user is currently logged in");
+  }
+
+  data.currentUser = null;
+  saveData();
+
+
+  return {};
 };
 
 
