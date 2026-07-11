@@ -2,8 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
 import crypto from 'crypto';
-import { authenticateListing, removeListing, saveListing, updateListing, UserLogin, UserLogout, UserRegister } from './features/helper.js';
-import { authenticateListing, getListings, removeListing, saveListing, updateListing, UserRegister } from './features/helper';
+import { authenticateListing, getListings, removeListing, saveListing, updateListing, UserLogin, UserLogout, UserRegister } from './features/helper.js';
 
 // Set up web app
 const app = express()
