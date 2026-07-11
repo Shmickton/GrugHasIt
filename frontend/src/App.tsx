@@ -34,7 +34,9 @@ function App() {
         <>
             <Heading activeView={activeView} onNavigate={setActiveView} />
 
-            {activeView === "listings" && <ListingGrid />}
+            {activeView === "listings" && (
+                <ListingGrid user={user} onNavigateToAccount={() => setActiveView("account")} />
+            )}
             {activeView === "myListings" && (
                 <MyListings user={user} onNavigateToAccount={() => setActiveView("account")} />
             )}

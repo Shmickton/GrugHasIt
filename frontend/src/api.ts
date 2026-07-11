@@ -7,6 +7,24 @@ export type Listing = {
     title: string;
     desc: string;
     cost: number;
+    imageSrc?: string | null;
+    borrowId?: number | null;
+    borrowedBy?: number | null;
+    borrowedByName?: string | null;
+    borrowStatus?: "available" | "borrowed";
+};
+
+export type Borrow = {
+    borrowId: number;
+    listingId: number;
+    borrowerId: number;
+    borrowerName: string;
+    ownerId: number;
+    ownerName: string;
+    status: "active" | "returned";
+    createdAt: string;
+    updatedAt: string;
+    note?: string;
 };
 
 type ApiErrorResponse = {
@@ -43,7 +61,7 @@ export function searchListings(query: string): Promise<Listing[]> {
 
 export function createListing(
     userId: number,
-    listing: { title: string; desc: string; cost: number }
+    listing: { title: string; desc: string; cost: number; imageSrc?: string | null }
 ): Promise<{ listingId: number }> {
     return apiRequest<{ listingId: number }>(`/listing/${userId}/create`, {
         method: "POST",
@@ -65,5 +83,29 @@ export function updateListing(
     return apiRequest<Listing>(`/listing/${userId}/update/${listingId}`, {
         method: "PUT",
         body: listing,
+    });
+}
+
+export function createBorrow(userId: number, listingId: number): Promise<Borrow> {
+    return apiRequest<Borrow>(`/borrow/${userId}/create`, {
+        method: "POST",
+        body: { listingId },
+    });
+}
+
+export function updateBorrow(
+    userId: number,
+    borrowId: number,
+    borrow: { status?: "active" | "returned"; note?: string }
+): Promise<Borrow> {
+    return apiRequest<Borrow>(`/borrow/${userId}/update/${borrowId}`, {
+        method: "PUT",
+        body: borrow,
+    });
+}
+
+export function removeBorrow(userId: number, borrowId: number): Promise<Borrow> {
+    return apiRequest<Borrow>(`/borrow/${userId}/remove/${borrowId}`, {
+        method: "DELETE",
     });
 }
