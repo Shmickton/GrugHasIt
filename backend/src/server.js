@@ -1,8 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
-import crypto from 'crypto'
-import { UserRegister } from './features/helper.js';
+import crypto from 'crypto';
+import { authenticateListing, removeListing, saveListing, updateListing, UserLogin, UserLogout, UserRegister } from './features/helper.js';
+import { authenticateListing, getListings, removeListing, saveListing, updateListing, UserRegister } from './features/helper';
 
 // Set up web app
 const app = express()
@@ -32,23 +33,59 @@ app.post('/auth/register', (req, res) => {
     }
 })
 
+app.post('/auth/login', (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const result = UserLogin(email, password);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
+})
+
+app.post('/auth/logout', (req, res) => {
+    try {
+        const result = UserLogout();
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
+})
+
 // LISTINGS
 
 app.post('/listing/:uid/create', (req, res) => {
-    const userId = parseInt(req.params.uid);
+    const userId = req.params.uid;
+    const title = req.body.title;
+    const desc = req.body.desc;
+    const cost = req.body.cost;
+    result = saveListing(userId, title, desc, cost);
     return res.json(result);
 })
 
 app.delete('/listing/:uid/remove/:lid', (req, res) => {
+    const userId = req.params.uid;
+    const listingId = req.params.lid;
+    authenticateListing(userId, listingId);
+    removeListing(listingId);
     return res.json(result);
 })
 
 app.put('/listing/:uid/update/:lid', (req, res) => {
+    const userId = req.params.uid;
+    const listingId = req.params.lid;
+    const title = req.body.title;
+    const desc = req.body.desc;
+    const cost = req.body.cost;
+    authenticateListing(userId, listingId);
+    updateListing(listingId, title, desc, cost);
     return res.json(result);
 })
 
 app.get('/listing/newest', (req, res) => {
-    return res.json(result);
+    const listings = getListings();
+    const last = listings.get(listings.size() - 1);
+    return res.json(last);
 })
 
 app.get('/listing/search', (req, res) => {

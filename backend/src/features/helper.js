@@ -1,6 +1,5 @@
 // R/W TO DATABASE
 
-import crypto from "crypto";
 import { getData, saveData } from "../dataStore.js";
 import { GrugError } from "./GrugError.js";
 
@@ -49,6 +48,41 @@ export const UserRegister = (email, password, UserName) => {
   return { userId: newUser.userId, userName: newUser.userName, email: newUser.email };
 };
 
+export const UserLogin = (email, password) => {
+  const data = getData();
+
+  if (typeof email !== "string" || typeof password !== "string") {
+    throw new GrugError("INVALID_INPUT", "Email and password must be strings");
+  }
+
+  const trimmedEmail = email.trim();
+  const user = data.users.find(currentUser => currentUser.email === trimmedEmail);
+
+  if (!user || user.password !== password) {
+    throw new GrugError("INVALID_CREDENTIALS", "Email or password is incorrect");
+  }
+
+  // Only one user can be logged in at a time.
+  data.currentUser = user.userId;
+  saveData();
+
+  return { userId: user.userId };
+};
+
+export const UserLogout = () => {
+  const data = getData();
+
+  if (data.currentUser === null) {
+    throw new GrugError("INVALID_USER", "No user is currently logged in");
+  }
+
+  data.currentUser = null;
+  saveData();
+
+
+  return {};
+};
+
 
 export function saveUser(user) {
     const data = getData();
@@ -64,16 +98,46 @@ export function getUsers() {
 
 }
 
-export function saveListing() {
+export function authenticateListing(userId, listingId) {
+    const data = getData();
+    const listing = data.listings.find(listing => listing.listingId === listingId);
+    if (!listing) {
+        //error
+    }
 
+    if (listing.userId != userId) {
+        //errors
+    }
 }
 
-export function removeListing() {
-
+export function saveListing(user, title, desc, cost) {
+    const data = getData();
+    const id = data.next_lid;
+    data.listings.push({ 
+        listingId: id, 
+        userId: user, 
+        title: title, 
+        desc: desc, 
+        cost: cost 
+    });
+    data.next_lid++;
+    saveData();
+    return id;
 }
 
-export function updateListing() {
+export function removeListing(id) {
+    const data = getData();
+    data.listings = data.listings.filter(listing => listing.listingId !== id);
+    saveData();
+}
 
+export function updateListing(id, title, desc, cost) {
+    const data = getData();
+    const listing = data.listings.find(listing => listing.listingId === id);
+    listing.title = title;
+    listing.desc = desc;
+    listing.cost = cost;
+    saveData();
 }
 
 export function getListing() {
@@ -81,7 +145,8 @@ export function getListing() {
 }
 
 export function getListings() {
-
+    const data = getData();
+    return data.listings;
 }
 
 export function saveBorrow() {
