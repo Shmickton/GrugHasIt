@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
 import crypto from 'crypto'
+import { UserRegister } from './features/helper.js';
 
 // Set up web app
 const app = express()
@@ -22,7 +23,13 @@ app.use(morgan())
 // AUTH:
 
 app.post('/auth/register', (req, res) => {
-    return res.json(result);
+    try {
+        const { email, password, nameFirst, nameLast } = req.body;
+        const result = UserRegister(email, password, nameFirst, nameLast);
+        return res.json(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.error ?? 'UNKNOWN_ERROR', message: error.message });
+    }
 })
 
 
