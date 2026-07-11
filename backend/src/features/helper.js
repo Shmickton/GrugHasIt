@@ -66,7 +66,7 @@ export const UserLogin = (email, password) => {
   data.currentUser = user.userId;
   saveData();
 
-  return { userId: user.userId };
+  return { userId: user.userId, userName: user.userName, email: user.email };
 };
 
 export const UserLogout = () => {
@@ -78,7 +78,6 @@ export const UserLogout = () => {
 
   data.currentUser = null;
   saveData();
-
 
   return {};
 };
