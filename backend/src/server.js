@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
 import crypto from 'crypto'
-import { authenticateListing, removeListing, saveListing } from './features/helper';
+import { authenticateListing, removeListing, saveListing, updateListing } from './features/helper';
 
 // Set up web app
 const app = express()
@@ -60,6 +60,8 @@ app.put('/listing/:uid/update/:lid', (req, res) => {
     const title = req.body.title;
     const desc = req.body.desc;
     const cost = req.body.cost;
+    authenticateListing(userId, listingId);
+    updateListing(listingId, title, desc, cost);
     return res.json(result);
 })
 
