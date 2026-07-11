@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
 import crypto from 'crypto';
-import { authenticateListing, removeListing, saveListing, updateListing, UserRegister } from './features/helper';
+import { authenticateListing, getListings, removeListing, saveListing, updateListing, UserRegister } from './features/helper';
 
 // Set up web app
 const app = express()
@@ -63,7 +63,9 @@ app.put('/listing/:uid/update/:lid', (req, res) => {
 })
 
 app.get('/listing/newest', (req, res) => {
-    return res.json(result);
+    const listings = getListings();
+    const last = listings.get(listings.size() - 1);
+    return res.json(last);
 })
 
 app.get('/listing/search', (req, res) => {

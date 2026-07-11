@@ -111,7 +111,8 @@ export function getListing() {
 }
 
 export function getListings() {
-
+    const data = getData();
+    return data.listings;
 }
 
 export function saveBorrow() {
